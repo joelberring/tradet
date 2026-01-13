@@ -2,6 +2,7 @@ import initManifold from 'manifold-3d';
 
 let manifold: any;
 let mModule: any;
+let Manifold: any;
 
 const initialize = async () => {
     console.log('Worker initialize() called');
@@ -11,6 +12,7 @@ const initialize = async () => {
         console.log('mModule received, setting up...');
         mModule.setup();
         manifold = mModule;
+        Manifold = mModule.Manifold;
         console.log('Manifold-3D Worker Ready ✅');
         self.postMessage({ type: 'READY' });
     } catch (err: any) {
@@ -34,7 +36,7 @@ const binaryUnion = (solids: any[]): any => {
     if (!left) return right;
     if (!right) return left;
 
-    const result = mModule.union(left, right);
+    const result = Manifold.union(left, right);
     // Cleanup intermediates
     left.delete();
     right.delete();
@@ -50,7 +52,7 @@ const createBranch = (start: number[], end: number[], radiusStart: number, radiu
 
     if (height < 0.0001) return null;
 
-    let cyl = mModule.cylinder(height, radiusStart, radiusEnd, 12);
+    let cyl = Manifold.cylinder(height, radiusStart, radiusEnd, 12);
 
     // Direction vector
     const dir = [
@@ -110,10 +112,22 @@ self.onmessage = async (e) => {
             const finalSolid = binaryUnion(solids);
             const mesh = finalSolid.getMesh();
 
+            // Extract vertex positions from interleaved vertProperties array
+            // vertProperties is interleaved: [x,y,z,nx,ny,nz,...] with numProp properties per vertex
+            const numProp = mesh.numProp || 3;
+            const numVerts = mesh.vertProperties.length / numProp;
+            const vertices = new Float32Array(numVerts * 3);
+
+            for (let i = 0; i < numVerts; i++) {
+                vertices[i * 3 + 0] = mesh.vertProperties[i * numProp + 0];
+                vertices[i * 3 + 1] = mesh.vertProperties[i * numProp + 1];
+                vertices[i * 3 + 2] = mesh.vertProperties[i * numProp + 2];
+            }
+
             self.postMessage({
                 type: 'TREE_READY',
                 payload: {
-                    vertices: mesh.vertPos,
+                    vertices: vertices,
                     indices: mesh.triVerts
                 }
             });

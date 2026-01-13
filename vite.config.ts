@@ -6,5 +6,18 @@ import topLevelAwait from 'vite-plugin-top-level-await'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), wasm(), topLevelAwait()],
+  optimizeDeps: {
+    exclude: ['manifold-3d']
+  },
+  assetsInclude: ['**/*.wasm'],
+  server: {
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    }
+  },
+  worker: {
+    format: 'es',
+    plugins: () => [wasm(), topLevelAwait()]
+  }
 })
-
