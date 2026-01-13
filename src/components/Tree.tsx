@@ -28,10 +28,25 @@ export const Tree = () => {
                 setGeometry(newGeo);
                 setIsGenerating(false);
             }
+            if (type === 'READY') {
+                // Worker is ready, trigger initial generation
+                useTreeStore.getState().setWorkerReady(true);
+                useTreeStore.getState().generate();
+            }
+        };
+
+        // Listen for Generate Tree button click
+        const handleGenerateEvent = () => {
+            useTreeStore.getState().generate();
         };
 
         worker.addEventListener('message', handleMessage);
-        return () => worker.removeEventListener('message', handleMessage);
+        window.addEventListener('GENERATE_TREE', handleGenerateEvent);
+
+        return () => {
+            worker.removeEventListener('message', handleMessage);
+            window.removeEventListener('GENERATE_TREE', handleGenerateEvent);
+        };
     }, []);
 
     useEffect(() => {
