@@ -15,11 +15,14 @@ export const Tree = () => {
     const botanist = useRef(new Botanist());
 
     useEffect(() => {
+        console.log('[Tree] Initializing worker...');
         worker.postMessage({ type: 'INIT' });
 
         const handleMessage = (e: MessageEvent) => {
             const { type, payload } = e.data;
+            console.log('[Tree] Worker message:', type);
             if (type === 'TREE_READY') {
+                console.log('[Tree] TREE_READY received, vertices:', payload.vertices?.length, 'indices:', payload.indices?.length);
                 const { vertices, indices } = payload;
                 const newGeo = new THREE.BufferGeometry();
                 newGeo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
@@ -29,14 +32,18 @@ export const Tree = () => {
                 setIsGenerating(false);
             }
             if (type === 'READY') {
-                // Worker is ready, trigger initial generation
+                console.log('[Tree] Worker READY, triggering initial generation');
                 useTreeStore.getState().setWorkerReady(true);
                 useTreeStore.getState().generate();
+            }
+            if (type === 'ERROR') {
+                console.error('[Tree] Worker ERROR:', payload);
             }
         };
 
         // Listen for Generate Tree button click
         const handleGenerateEvent = () => {
+            console.log('[Tree] GENERATE_TREE event received, calling generate()');
             useTreeStore.getState().generate();
         };
 
@@ -50,14 +57,25 @@ export const Tree = () => {
     }, []);
 
     useEffect(() => {
-        if (isGenerating) return;
+        console.log('[Tree] Generation effect triggered, workerReady:', settings.workerReady, 'triggerGeneration:', settings.triggerGeneration, 'isGenerating:', isGenerating);
+        if (isGenerating) {
+            console.log('[Tree] Already generating, skipping');
+            return;
+        }
+        if (!settings.workerReady) {
+            console.log('[Tree] Worker not ready yet, skipping generation');
+            return;
+        }
 
         const timer = setTimeout(() => {
+            console.log('[Tree] Starting tree generation...');
             setIsGenerating(true);
-            let branches = [];
+            let branches: any[] = [];
 
             if (settings.generationMode === 'realistic') {
+                console.log('[Tree] Generating L-system string...');
                 const lString = botanist.current.generateString('F', settings.recursionDepth, settings.branchingFactor);
+                console.log('[Tree] L-string length:', lString.length);
                 branches = botanist.current.interpret(
                     lString,
                     settings.initialRadius,
@@ -67,6 +85,7 @@ export const Tree = () => {
                     settings.targetScale,
                     settings.gravitropism
                 );
+                console.log('[Tree] Generated branches:', branches.length);
             } else {
                 const points = AttractorGenerator.generate(
                     settings.attractorType,
@@ -83,6 +102,7 @@ export const Tree = () => {
                 }
             }
 
+            console.log('[Tree] Sending GENERATE_TREE to worker with', branches.length, 'branches');
             worker.postMessage({
                 type: 'GENERATE_TREE',
                 payload: { branches }
