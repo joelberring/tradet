@@ -1,4 +1,4 @@
-import { useControls, folder } from 'leva';
+import { useControls, folder, button } from 'leva';
 import { useTreeStore, type TreeSettings } from '../store/useTreeStore';
 import { useEffect } from 'react';
 
@@ -6,6 +6,12 @@ export const Controls = () => {
     const updateSettings = useTreeStore((state) => state.updateSettings);
 
     const [values] = useControls(() => ({
+        'Generate Tree 🌳': button(() => {
+            window.dispatchEvent(new CustomEvent('GENERATE_TREE'));
+        }),
+        'Export STL 📥': button(() => {
+            window.dispatchEvent(new CustomEvent('EXPORT_STL'));
+        }),
         Mode: folder({
             generationMode: { value: 'realistic', options: ['realistic', 'abstract'] },
         }),

@@ -7,25 +7,30 @@ interface Branch {
     r2: number;
 }
 
-interface LSystemRules {
-    [key: string]: string;
-}
 
 export class Botanist {
-    private rules: LSystemRules = {
-        'F': 'FF-[-F+F+F]+[+F-F-F]' // Standard branching rule
-    };
+    constructor() { }
 
-    constructor(rules?: LSystemRules) {
-        if (rules) this.rules = rules;
-    }
+    generateString(axiom: string, depth: number, branchingFactor: number = 2): string {
+        // Dynamic rule generation based on branching factor
+        // Default: 'FF-[-F+F+F]+[+F-F-F]' has 2 major branching points
+        // Let's create a rule that has 'branchingFactor' branches
+        let branchStr = '';
+        for (let i = 0; i < branchingFactor; i++) {
+            const angleSign = i % 2 === 0 ? '+' : '-';
+            branchStr += `[${angleSign}F]`;
+        }
+        const rule = 'FF' + branchStr;
 
-    generateString(axiom: string, depth: number): string {
         let current = axiom;
         for (let i = 0; i < depth; i++) {
             let next = '';
             for (const char of current) {
-                next += this.rules[char] || char;
+                if (char === 'F') {
+                    next += rule;
+                } else {
+                    next += char;
+                }
             }
             current = next;
         }

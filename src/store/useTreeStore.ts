@@ -20,10 +20,16 @@ export interface TreeSettings {
     generationMode: 'realistic' | 'abstract';
     attractorType: 'thomas' | 'aizawa';
     attractorIterations: number;
+
+    // Infrastructure
+    workerReady: boolean;
+    triggerGeneration: number;
 }
 
 interface TreeState extends TreeSettings {
     updateSettings: (settings: Partial<TreeSettings>) => void;
+    setWorkerReady: (ready: boolean) => void;
+    generate: () => void;
 }
 
 export const useTreeStore = create<TreeState>((set) => ({
@@ -44,5 +50,10 @@ export const useTreeStore = create<TreeState>((set) => ({
 
     gravitropism: 0.1,
 
+    workerReady: false,
+    triggerGeneration: 0,
+
     updateSettings: (newSettings) => set((state) => ({ ...state, ...newSettings })),
+    setWorkerReady: (ready) => set({ workerReady: ready }),
+    generate: () => set((state) => ({ triggerGeneration: state.triggerGeneration + 1 })),
 }));

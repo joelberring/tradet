@@ -37,41 +37,59 @@ export const Tree = () => {
     useEffect(() => {
         if (isGenerating) return;
 
-        setIsGenerating(true);
-        let branches = [];
+        const timer = setTimeout(() => {
+            setIsGenerating(true);
+            let branches = [];
 
-        if (settings.generationMode === 'realistic') {
-            const lString = botanist.current.generateString('F', settings.recursionDepth);
-            branches = botanist.current.interpret(
-                lString,
-                settings.initialRadius,
-                settings.thicknessDecay,
-                settings.lengthDecay,
-                settings.minPrintableRadius,
-                settings.targetScale,
-                settings.gravitropism
-            );
-        } else {
-            const points = AttractorGenerator.generate(
-                settings.attractorType,
-                settings.attractorIterations,
-                0.02
-            );
-            for (let i = 0; i < points.length - 1; i++) {
-                branches.push({
-                    start: [points[i].x, points[i].y, points[i].z],
-                    end: [points[i + 1].x, points[i + 1].y, points[i + 1].z],
-                    r1: settings.initialRadius * 0.1,
-                    r2: settings.initialRadius * 0.1
-                });
+            if (settings.generationMode === 'realistic') {
+                const lString = botanist.current.generateString('F', settings.recursionDepth, settings.branchingFactor);
+                branches = botanist.current.interpret(
+                    lString,
+                    settings.initialRadius,
+                    settings.thicknessDecay,
+                    settings.lengthDecay,
+                    settings.minPrintableRadius,
+                    settings.targetScale,
+                    settings.gravitropism
+                );
+            } else {
+                const points = AttractorGenerator.generate(
+                    settings.attractorType,
+                    settings.attractorIterations,
+                    0.02
+                );
+                for (let i = 0; i < points.length - 1; i++) {
+                    branches.push({
+                        start: [points[i].x, points[i].y, points[i].z],
+                        end: [points[i + 1].x, points[i + 1].y, points[i + 1].z],
+                        r1: settings.initialRadius * 0.1,
+                        r2: settings.initialRadius * 0.1
+                    });
+                }
             }
-        }
 
-        worker.postMessage({
-            type: 'GENERATE_TREE',
-            payload: { branches }
-        });
-    }, [settings]);
+            worker.postMessage({
+                type: 'GENERATE_TREE',
+                payload: { branches }
+            });
+        }, 300); // 300ms debounce
+
+        return () => clearTimeout(timer);
+    }, [
+        settings.workerReady,
+        settings.triggerGeneration,
+        settings.generationMode,
+        settings.branchingFactor,
+        settings.recursionDepth,
+        settings.thicknessDecay,
+        settings.initialRadius,
+        settings.lengthDecay,
+        settings.minPrintableRadius,
+        settings.targetScale,
+        settings.gravitropism,
+        settings.attractorType,
+        settings.attractorIterations
+    ]);
 
     if (!geometry) return null;
 

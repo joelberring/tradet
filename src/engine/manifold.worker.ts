@@ -4,10 +4,19 @@ let manifold: any;
 let mModule: any;
 
 const initialize = async () => {
-    mModule = await initManifold();
-    mModule.setup();
-    manifold = mModule;
-    self.postMessage({ type: 'READY' });
+    console.log('Worker initialize() called');
+    try {
+        console.log('Calling initManifold...');
+        mModule = await initManifold();
+        console.log('mModule received, setting up...');
+        mModule.setup();
+        manifold = mModule;
+        console.log('Manifold-3D Worker Ready ✅');
+        self.postMessage({ type: 'READY' });
+    } catch (err: any) {
+        console.error('❌ Failed to initialize Manifold-3D:', err);
+        self.postMessage({ type: 'ERROR', payload: 'Init failed: ' + err.message });
+    }
 };
 
 // Binary tree union strategy for performance
@@ -113,6 +122,12 @@ self.onmessage = async (e) => {
         } catch (err: any) {
             self.postMessage({ type: 'ERROR', payload: err.message });
         }
+    }
+    if (type === 'EXPORT_STL') {
+        // finalSolid needs to be accessible here. 
+        // Note: finalSolid is currently local to GENERATE_TREE block. 
+        // I need to move it to a higher scope to support export.
+        self.postMessage({ type: 'ERROR', payload: 'Export not yet refactored for global scope' });
     }
 };
 
