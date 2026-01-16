@@ -1,5 +1,9 @@
 import { create } from 'zustand';
 
+export type TreeType = 'conifer' | 'deciduous' | 'shrub' | 'cypress' | 'palm';
+export type TreeSpecies = 'linden' | 'oak' | 'birch' | 'spruce' | 'pine';
+export type TreeAge = 'young' | 'mature' | 'old';
+
 export interface TreeSettings {
     // Biological parameters
     branchingFactor: number;
@@ -21,6 +25,22 @@ export interface TreeSettings {
     attractorType: 'thomas' | 'aizawa';
     attractorIterations: number;
 
+    // Tree type and foliage
+    treeType: TreeType;
+    foliageDensity: number;
+    foliageSize: number;
+    showFoliage: boolean;
+    showBranches: boolean;
+
+    // NEW: Realistic tree parameters
+    treeSpecies: TreeSpecies;
+    treeAge: TreeAge;
+    treeHeight: number;
+    crownWidth: number;
+
+    // Scaling for physical models
+    modelScale: number; // e.g. 500 for 1:500
+
     // Infrastructure
     workerReady: boolean;
     triggerGeneration: number;
@@ -38,17 +58,31 @@ export const useTreeStore = create<TreeState>((set) => ({
     attractorIterations: 1000,
 
     // Defaults
-    branchingFactor: 2,
-    recursionDepth: 5,
+    branchingFactor: 3,
+    recursionDepth: 7,
     thicknessDecay: 2.2,
-    initialRadius: 2.0,
-    lengthDecay: 0.8,
+    initialRadius: 3.0,
+    lengthDecay: 0.75,
 
     nozzleDiameter: 0.4,
-    minPrintableRadius: 0.4,
+    minPrintableRadius: 0.05, // Lowered for finer branches
     targetScale: 1.0,
 
     gravitropism: 0.1,
+
+    // Tree type and foliage defaults
+    treeType: 'deciduous',
+    foliageDensity: 0.7,
+    foliageSize: 1.0,
+    showFoliage: true,
+    showBranches: true,
+
+    // NEW: Realistic tree defaults
+    treeSpecies: 'linden',
+    treeAge: 'mature',
+    treeHeight: 15,
+    crownWidth: 1.0,
+    modelScale: 200, // Default 1:200
 
     workerReady: false,
     triggerGeneration: 0,

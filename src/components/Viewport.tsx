@@ -7,8 +7,8 @@ export const Viewport = () => {
     return (
         <div style={{ width: '100%', height: '100vh', background: '#111' }}>
             <Canvas shadows>
-                <PerspectiveCamera makeDefault position={[15, 15, 15]} />
-                <OrbitControls makeDefault />
+                <PerspectiveCamera makeDefault position={[25, 12, 25]} fov={50} />
+                <OrbitControls makeDefault target={[0, 6, 0]} />
 
                 <Grid
                     infiniteGrid
