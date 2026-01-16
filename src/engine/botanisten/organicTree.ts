@@ -95,7 +95,7 @@ export class OrganicTreeGenerator {
     private generateMainBranches(
         trunkTop: Vector3,
         crownRadius: number,
-        crownHeight: number,
+        _crownHeight: number,
         branchThickness: number,
         density: number
     ): void {

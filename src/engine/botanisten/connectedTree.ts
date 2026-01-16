@@ -84,7 +84,7 @@ export class ConnectedTreeGenerator {
      * Each new branch starts from an existing branch end
      */
     private generateConnectedCrown(
-        trunkTop: Vector3,
+        _trunkTop: Vector3,
         crownRadius: number,
         _crownHeight: number, // Prefixed with _ to indicate intentionally unused
         thickness: number,
