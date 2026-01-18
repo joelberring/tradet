@@ -266,11 +266,13 @@ export class RealisticTreeGenerator {
         const crownWidth = params.crownWidth ?? 1.0;
 
         // Use manual overrides if provided, otherwise use preset defaults
-        const effectiveTrunkHeight = params.trunkHeight ?? this.preset.trunkHeightRatio;
+        // trunkHeight is now in meters (where branches start), not a ratio
+        const baseOfCrown = params.trunkHeight !== undefined
+            ? Math.min(params.trunkHeight, treeHeight * 0.8)  // Cap at 80% of tree height
+            : treeHeight * this.preset.trunkHeightRatio;
         const effectiveDensity = params.crownDensity ?? 5;  // 1-10 scale
 
         // Calculate trunk dimensions using effective trunk height
-        const baseOfCrown = treeHeight * effectiveTrunkHeight;
         // Conifers with very low trunk ratios need trunk radius based on treeHeight
         // Deciduous trees use baseOfCrown to maintain original proportions
         const isConifer = this.preset.crownShape === 'pyramidal' || this.preset.crownShape === 'umbrella';
@@ -328,8 +330,9 @@ export class RealisticTreeGenerator {
         const maxLevels = Math.max(4, this.preset.maxBranchLevels + this.ageModifiers.maxLevelsAdjust);
 
         // Generate branches at multiple heights along the leader
-        // Use crownDensity parameter: 1=sparse (4 levels), 10=dense (15 levels)
-        const numBranchLevels = Math.floor(4 + (effectiveDensity / 10) * 11 * this.ageModifiers.branchDensityMultiplier);
+        // Use crownDensity parameter: 1=sparse (3 levels), 10=dense (10 levels)
+        // Capped at 10 for performance on Vercel
+        const numBranchLevels = Math.min(10, Math.floor(3 + (effectiveDensity / 10) * 7 * this.ageModifiers.branchDensityMultiplier));
 
         for (let level = 0; level < numBranchLevels; level++) {
             // Height along the leader where this tier of branches originates
@@ -429,11 +432,11 @@ export class RealisticTreeGenerator {
             r2: endRadius,
         });
 
-        // Generate child branches - balance density vs performance
+        // Generate child branches - optimized for performance
         const baseChildren = depth < 2 ?
-            Math.floor(3 + this.random()) :  // 3-4 at primary level
-            this.preset.terminalBranchCount;
-        const numChildren = Math.min(baseChildren, 4); // cap at 4 for performance
+            Math.floor(2 + this.random()) :  // 2-3 at primary level
+            Math.min(this.preset.terminalBranchCount, 2);
+        const numChildren = Math.min(baseChildren, 3); // cap at 3 for performance
 
         const childRadius = radius * this.preset.radiusDecay;
         const childLength = length * this.preset.lengthDecay;

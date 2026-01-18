@@ -39,7 +39,7 @@ export interface TreeSettings {
     crownWidth: number;
 
     // Manual shape controls
-    trunkHeight: number;   // 0-1, where branches start (0 = ground, 1 = top)
+    trunkHeight: number;   // Height in meters where branches start
     crownDensity: number;  // 1-10, how many branches
 
     // Scaling for physical models
@@ -87,9 +87,9 @@ export const useTreeStore = create<TreeState>((set) => ({
     treeHeight: 15,
     crownWidth: 1.0,
 
-    // Manual shape controls - null means use species default
-    trunkHeight: 0.3,   // Start with 30% trunk
-    crownDensity: 5,    // Medium density
+    // Manual shape controls
+    trunkHeight: 3,      // 3 meters before branches start
+    crownDensity: 5,     // Medium density
     modelScale: 200, // Default 1:200
 
     workerReady: false,

@@ -96,8 +96,11 @@ const createBranch = (start: number[], end: number[], radiusStart: number, radiu
 
     if (height < 0.0001) return null;
 
-    // Manifold.cylinder creates along Z-axis from z=0 to z=height
-    let cyl = Manifold.cylinder(height, radiusStart, radiusEnd, 16);
+    // Use fewer segments for smaller branches (optimization)
+    const avgRadius = (radiusStart + radiusEnd) / 2;
+    const segments = avgRadius > 0.3 ? 12 : avgRadius > 0.1 ? 8 : 6;
+
+    let cyl = Manifold.cylinder(height, radiusStart, radiusEnd, segments);
 
     // Calculate spherical angles for direction
     // We need to rotate the Z-axis (0,0,1) to align with (dx, dy, dz)

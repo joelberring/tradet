@@ -56,12 +56,11 @@ export const Controls = () => {
                 render: (get) => get('Mode.generationMode') === 'realistic'
             },
             trunkHeight: {
-                value: 0.3,
-                min: 0.1,
-                max: 0.7,
-                step: 0.05,
-                label: 'Stamhöjd',
-                hint: '(var grenarna börjar)',
+                value: 3,
+                min: 1,
+                max: 10,
+                step: 0.5,
+                label: 'Grenstart (m)',
                 render: (get) => get('Mode.generationMode') === 'realistic'
             },
             crownDensity: {

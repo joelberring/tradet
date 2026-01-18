@@ -95,13 +95,14 @@ export const Tree = () => {
             if (settings.generationMode === 'realistic') {
                 console.log('[Tree] Generating realistic tree:', settings.treeSpecies, settings.treeAge);
 
-                // Compute effective min radius to ensure 2mm minimum diameter in print
-                // minDiameter = 2mm = 0.002m in STL, scaled up by modelScale for internal units
-                const minPrintDiameter = 0.002; // 2mm in meters
-                const minRadiusForPrint = (minPrintDiameter / 2) * settings.modelScale;
-                const effectiveMinRadius = Math.max(settings.minPrintableRadius, minRadiusForPrint);
+                // Compute effective min radius for printability
+                // Internal units are in meters - for a 15m tree at 1:200, min branch should be ~2mm in print
+                // which means ~0.4m in internal units (0.002 * 200 = 0.4m)
+                // BUT we want visual detail, so use a smaller value and let the STL export handle scaling
+                const minRadiusForGeneration = 0.02; // 2cm in tree-space = plenty of detail
+                const effectiveMinRadius = Math.max(settings.minPrintableRadius, minRadiusForGeneration);
 
-                console.log('[Tree] Min radius:', effectiveMinRadius.toFixed(3), 'm (ensuring 2mm print diameter)');
+                console.log('[Tree] Min radius:', effectiveMinRadius.toFixed(3), 'm');
 
                 branches = treeGenerator.current.generateTree({
                     treeHeight: settings.treeHeight,
