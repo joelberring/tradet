@@ -293,8 +293,27 @@ self.onmessage = async (e) => {
         }
 
         try {
+            // Get scale from payload (modelScale like 200 for 1:200)
+            // We need to convert meters to the print size: divide by scale
+            const modelScale = payload?.modelScale ?? 1;
+            const scaleFactor = 1 / modelScale;
+
             const mesh = currentSolid.getMesh();
-            const stlBuffer = meshToSTL(mesh);
+
+            // Scale vertices for export (internal units are meters, output in meters/scale)
+            // e.g. 15m tree at 1:200 → 0.075m = 75mm in the STL
+            const scaledVertProperties = new Float32Array(mesh.vertProperties.length);
+            for (let i = 0; i < mesh.vertProperties.length; i++) {
+                scaledVertProperties[i] = mesh.vertProperties[i] * scaleFactor;
+            }
+
+            // Create a scaled mesh copy for export
+            const scaledMesh = {
+                ...mesh,
+                vertProperties: scaledVertProperties
+            };
+
+            const stlBuffer = meshToSTL(scaledMesh);
 
             self.postMessage({
                 type: 'STL_READY',

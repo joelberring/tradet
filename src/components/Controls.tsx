@@ -114,11 +114,15 @@ export const Controls = () => {
 
         // Update read-only displays
         const printH = ((values.treeHeight * 1000) / values.modelScale).toFixed(1);
-        const minTh = ((values.minPrintableRadius * 2 * 1000) / values.modelScale).toFixed(2);
+
+        // Calculate effective min thickness (2mm floor for printability)
+        const minPrintDiameter = 2; // 2mm minimum for 3D printing
+        const userMinDiameter = (values.minPrintableRadius * 2 * 1000) / values.modelScale;
+        const effectiveMinDiameter = Math.max(userMinDiameter, minPrintDiameter);
 
         set({
             printHeight: `${printH} mm`,
-            minThickness: `${minTh} mm`
+            minThickness: `${effectiveMinDiameter.toFixed(1)} mm`
         });
     }, [values, updateSettings, set]);
 

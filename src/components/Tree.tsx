@@ -61,7 +61,8 @@ export const Tree = () => {
 
         const handleExportEvent = () => {
             console.log('[Tree] EXPORT_STL event received, requesting export...');
-            worker.postMessage({ type: 'EXPORT_STL' });
+            const { modelScale } = useTreeStore.getState();
+            worker.postMessage({ type: 'EXPORT_STL', payload: { modelScale } });
         };
 
         worker.addEventListener('message', handleMessage);
@@ -94,9 +95,17 @@ export const Tree = () => {
             if (settings.generationMode === 'realistic') {
                 console.log('[Tree] Generating realistic tree:', settings.treeSpecies, settings.treeAge);
 
+                // Compute effective min radius to ensure 2mm minimum diameter in print
+                // minDiameter = 2mm = 0.002m in STL, scaled up by modelScale for internal units
+                const minPrintDiameter = 0.002; // 2mm in meters
+                const minRadiusForPrint = (minPrintDiameter / 2) * settings.modelScale;
+                const effectiveMinRadius = Math.max(settings.minPrintableRadius, minRadiusForPrint);
+
+                console.log('[Tree] Min radius:', effectiveMinRadius.toFixed(3), 'm (ensuring 2mm print diameter)');
+
                 branches = treeGenerator.current.generateTree({
                     treeHeight: settings.treeHeight,
-                    minRadius: settings.minPrintableRadius,
+                    minRadius: effectiveMinRadius,
                     seed: settings.triggerGeneration,
                     preset: settings.treeSpecies,
                     age: settings.treeAge,
@@ -139,6 +148,7 @@ export const Tree = () => {
         settings.crownWidth,
         settings.recursionDepth,
         settings.minPrintableRadius,
+        settings.modelScale,
         settings.targetScale,
         settings.attractorType,
         settings.attractorIterations,
