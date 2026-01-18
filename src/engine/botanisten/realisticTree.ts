@@ -256,6 +256,7 @@ export class RealisticTreeGenerator {
         crownWidth?: number;
         trunkHeight?: number;    // Manual override for trunk height ratio (0-1)
         crownDensity?: number;   // Manual override for branch density (1-10)
+        trunkThickness?: number; // Manual override for thickness multiplier
     }): BranchSegment[] {
         this.segments = [];
         this.seed = params.seed ?? 42;
@@ -271,11 +272,12 @@ export class RealisticTreeGenerator {
             ? Math.min(params.trunkHeight, treeHeight * 0.8)  // Cap at 80% of tree height
             : treeHeight * this.preset.trunkHeightRatio;
         const effectiveDensity = params.crownDensity ?? 5;  // 1-10 scale
+        const effectiveThickness = params.trunkThickness ?? 1.0;
 
         // Calculate trunk dimensions using effective trunk height
         // Trunk radius should be proportional to tree height, not crown base
         // This ensures consistent branch thickness regardless of where branches start
-        const trunkRadius = treeHeight * this.preset.trunkDiameterRatio * this.ageModifiers.trunkThicknessMultiplier;
+        const trunkRadius = treeHeight * this.preset.trunkDiameterRatio * this.ageModifiers.trunkThicknessMultiplier * effectiveThickness;
         // Higher min radius = fewer segments = faster generation
         const minRadius = Math.max(params.minRadius * 0.25, 0.03);
 

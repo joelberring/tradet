@@ -95,14 +95,13 @@ export const Tree = () => {
             if (settings.generationMode === 'realistic') {
                 console.log('[Tree] Generating realistic tree:', settings.treeSpecies, settings.treeAge);
 
-                // Compute effective min radius for printability
-                // Internal units are in meters - for a 15m tree at 1:200, min branch should be ~2mm in print
-                // which means ~0.4m in internal units (0.002 * 200 = 0.4m)
-                // BUT we want visual detail, so use a smaller value and let the STL export handle scaling
-                const minRadiusForGeneration = 0.02; // 2cm in tree-space = plenty of detail
-                const effectiveMinRadius = Math.max(settings.minPrintableRadius, minRadiusForGeneration);
+                // Minimum 3D printable radius (1mm radius = 2mm diameter)
+                // We use this to ensure the finest branches are printable
+                const minPrintRadius = 0.001 * settings.modelScale;
+                // We allow some detail but stay above a reasonable threshold
+                const effectiveMinRadius = Math.max(settings.minPrintableRadius, minPrintRadius * 0.4);
 
-                console.log('[Tree] Min radius:', effectiveMinRadius.toFixed(3), 'm');
+                console.log('[Tree] Min printable radius:', minPrintRadius.toFixed(3), 'm, effective:', effectiveMinRadius.toFixed(3), 'm');
 
                 branches = treeGenerator.current.generateTree({
                     treeHeight: settings.treeHeight,
@@ -113,6 +112,7 @@ export const Tree = () => {
                     crownWidth: settings.crownWidth,
                     trunkHeight: settings.trunkHeight,
                     crownDensity: settings.crownDensity,
+                    trunkThickness: settings.trunkThickness,
                 });
 
                 console.log('[Tree] Generated', branches.length, 'realistic segments');
@@ -155,6 +155,7 @@ export const Tree = () => {
         settings.minPrintableRadius,
         settings.modelScale,
         settings.targetScale,
+        settings.trunkThickness,
         settings.attractorType,
         settings.attractorIterations,
     ]);

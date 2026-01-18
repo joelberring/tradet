@@ -72,6 +72,15 @@ export const Controls = () => {
                 hint: '(antal grenar)',
                 render: (get) => get('Mode.generationMode') === 'realistic'
             },
+            trunkThickness: {
+                value: 1.0,
+                min: 0.5,
+                max: 2.0,
+                step: 0.1,
+                label: 'Tjocklek',
+                hint: '(stam & grenar)',
+                render: (get) => get('Mode.generationMode') === 'realistic'
+            },
         }, { collapsed: false }),
         // Branching detail controls
         'Grenstruktur': folder({
