@@ -35,74 +35,86 @@ export interface TreePreset {
     maxBranchLevels: number;       // Maximum recursion depth
     terminalBranchCount: number;   // Branches at terminal nodes
     leaderRatio: number;           // How much leader (central trunk) extends through crown (0.5-1.0)
+    terminalCurvature: number;     // NEW: Upward curvature at branch tips (phototropism)
+    branchesPerLevel: number;      // NEW: How many primary branches per tier
 }
 
 export const TREE_PRESETS: Record<string, TreePreset> = {
     linden: {
         name: 'Lind (Tilia cordata)',
-        trunkHeightRatio: 0.25,
-        trunkDiameterRatio: 0.04,
-        branchAngleBase: Math.PI / 4.5,  // ~40 degrees
-        branchAngleVariation: 0.25,
-        radiusDecay: 0.58,
-        lengthDecay: 0.68,
+        trunkHeightRatio: 0.40,           // Taller trunk like reference images
+        trunkDiameterRatio: 0.035,        // Slightly thinner for elegance
+        branchAngleBase: Math.PI / 3,     // ~60 degrees - wider spread
+        branchAngleVariation: 0.4,        // More natural variation
+        radiusDecay: 0.50,                // Faster tapering for elegance
+        lengthDecay: 0.75,                // Longer secondary branches
         crownShape: 'oval',
-        maxBranchLevels: 6,  // Reduced for performance
+        maxBranchLevels: 5,               // Reduced for cleaner look
         terminalBranchCount: 2,
         leaderRatio: 0.85,
+        terminalCurvature: 0.15,          // Gentle upward curve at tips
+        branchesPerLevel: 3,              // Sparser branches
     },
     oak: {
         name: 'Ek (Quercus robur)',
-        trunkHeightRatio: 0.18,
-        trunkDiameterRatio: 0.065,
-        branchAngleBase: Math.PI / 2.8,  // ~64 degrees
-        branchAngleVariation: 0.35,
-        radiusDecay: 0.6,
-        lengthDecay: 0.7,
+        trunkHeightRatio: 0.30,           // Higher trunk
+        trunkDiameterRatio: 0.055,        // Thick trunk
+        branchAngleBase: Math.PI / 2.5,   // ~72 degrees - spreading
+        branchAngleVariation: 0.45,       // Very natural, irregular
+        radiusDecay: 0.55,
+        lengthDecay: 0.72,
         crownShape: 'dome',
-        maxBranchLevels: 5,  // Reduced for performance
-        terminalBranchCount: 3,
-        leaderRatio: 0.6,
+        maxBranchLevels: 4,               // Reduced for clarity
+        terminalBranchCount: 2,
+        leaderRatio: 0.55,
+        terminalCurvature: 0.08,          // Slight upward curve
+        branchesPerLevel: 4,              // Dense but not cluttered
     },
     birch: {
         name: 'Björk (Betula)',
-        trunkHeightRatio: 0.35,
-        trunkDiameterRatio: 0.022,
-        branchAngleBase: Math.PI / 4,   // 45 degrees
-        branchAngleVariation: 0.2,
-        radiusDecay: 0.52,
-        lengthDecay: 0.62,
+        trunkHeightRatio: 0.45,           // Very tall trunk
+        trunkDiameterRatio: 0.020,        // Slender
+        branchAngleBase: Math.PI / 3.5,   // ~51 degrees - elegant angle
+        branchAngleVariation: 0.3,
+        radiusDecay: 0.48,                // Fast tapering
+        lengthDecay: 0.68,
         crownShape: 'pyramidal',
-        maxBranchLevels: 6,
+        maxBranchLevels: 5,
         terminalBranchCount: 2,
         leaderRatio: 0.95,
+        terminalCurvature: 0.20,          // Drooping then upward - characteristic
+        branchesPerLevel: 3,
     },
     // Conifers
     spruce: {
         name: 'Gran (Picea abies)',
-        trunkHeightRatio: 0.08,         // Very short trunk - branches start near ground
-        trunkDiameterRatio: 0.025,      // Slender trunk
-        branchAngleBase: Math.PI / 2.2, // ~82 degrees - near horizontal, slightly drooping
-        branchAngleVariation: 0.08,     // Very consistent angles (regular pyramid)
-        radiusDecay: 0.5,
-        lengthDecay: 0.88,              // Branches get MUCH shorter higher up (narrow pyramid)
+        trunkHeightRatio: 0.10,           // Low branches
+        trunkDiameterRatio: 0.022,        // Slender trunk
+        branchAngleBase: Math.PI / 2.0,   // ~90 degrees - horizontal
+        branchAngleVariation: 0.10,       // Very consistent (pyramid)
+        radiusDecay: 0.50,
+        lengthDecay: 0.90,                // Branches get much shorter at top
         crownShape: 'pyramidal',
-        maxBranchLevels: 5,             // Moderate density
+        maxBranchLevels: 4,
         terminalBranchCount: 2,
-        leaderRatio: 0.99,              // Very strong central leader all the way to tip
+        leaderRatio: 0.99,                // Strong central leader
+        terminalCurvature: 0.05,          // Very slight droop then up
+        branchesPerLevel: 5,              // Whorled branches
     },
     pine: {
         name: 'Tall (Pinus sylvestris)',
-        trunkHeightRatio: 0.75,         // Very high trunk - branches only in top 25%
-        trunkDiameterRatio: 0.025,      // Slender trunk
-        branchAngleBase: Math.PI / 2.2, // ~82 degrees - nearly horizontal
-        branchAngleVariation: 0.35,     // Irregular, gnarled
-        radiusDecay: 0.6,
-        lengthDecay: 0.65,              // Branches maintain length (flat crown)
-        crownShape: 'umbrella',         // Flat-topped, umbrella-like crown
-        maxBranchLevels: 4,             // Sparse branching
+        trunkHeightRatio: 0.70,           // Very high trunk
+        trunkDiameterRatio: 0.028,        // Moderate trunk
+        branchAngleBase: Math.PI / 2.3,   // ~78 degrees - nearly horizontal
+        branchAngleVariation: 0.45,       // Irregular, gnarled
+        radiusDecay: 0.58,
+        lengthDecay: 0.62,                // Branches maintain length
+        crownShape: 'umbrella',           // Flat-topped
+        maxBranchLevels: 4,
         terminalBranchCount: 2,
-        leaderRatio: 0.3,               // Leader stops early, creating flat top
+        leaderRatio: 0.25,                // Leader stops early
+        terminalCurvature: 0.12,
+        branchesPerLevel: 3,
     },
 };
 
@@ -308,25 +320,30 @@ export class RealisticTreeGenerator {
             );
 
             // Branch length based on available space
-            const baseBranchLength = availableRadius * this.randomRange(0.8, 1.0);
+            const baseBranchLength = availableRadius * this.randomRange(0.85, 1.1);
 
-            // Number of branches at this level (more at bottom, fewer at top)
-            const branchesAtLevel = Math.floor((3 + this.random() * 2) * (1 - t * 0.3) * this.ageModifiers.branchDensityMultiplier);
+            // Number of branches at this level - use preset value with variation
+            const baseCount = this.preset.branchesPerLevel || 3;
+            const branchesAtLevel = Math.max(2, Math.floor(
+                baseCount * (1 - t * 0.2) * this.ageModifiers.branchDensityMultiplier
+            ));
 
             const origin = new Vector3(0, branchHeight, 0);
 
             for (let i = 0; i < branchesAtLevel; i++) {
-                const phi = (i / branchesAtLevel) * Math.PI * 2 + this.randomRange(-0.3, 0.3);
+                // Use golden angle distribution for more natural spacing
+                const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+                const phi = i * goldenAngle + level * 0.5 + this.randomRange(-0.4, 0.4);
 
                 // Angle decreases slightly for upper branches (more upward)
-                const angleMultiplier = 1 - t * 0.3;
+                const angleMultiplier = 1 - t * 0.25;
                 const theta = this.preset.branchAngleBase * angleMultiplier +
                     this.randomRange(-this.preset.branchAngleVariation, this.preset.branchAngleVariation);
 
                 const dir = this.calculateBranchDirection(new Vector3(0, 1, 0), theta, phi);
 
-                // Branch radius using da Vinci rule approximation
-                const branchRadius = leaderRadiusHere * (0.4 + this.random() * 0.2);
+                // Branch radius using da Vinci rule approximation - more variation
+                const branchRadius = leaderRadiusHere * (0.35 + this.random() * 0.25);
 
                 this.generateBranchWithEnvelope(
                     origin.clone(),
@@ -386,36 +403,40 @@ export class RealisticTreeGenerator {
 
         // Generate child branches
         const numChildren = depth < 2 ?
-            Math.floor(2 + this.random() * 2) :
+            Math.floor(2 + this.random()) :  // Simpler at primary level
             this.preset.terminalBranchCount;
 
         const childRadius = radius * this.preset.radiusDecay;
         const childLength = length * this.preset.lengthDecay;
 
         for (let i = 0; i < numChildren; i++) {
-            const phi = (i / numChildren) * Math.PI * 2 + this.randomRange(-0.5, 0.5);
+            // Golden angle distribution for natural branch arrangement
+            const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+            const phi = i * goldenAngle + this.randomRange(-0.6, 0.6);
 
             // Reduce angle for deeper branches (tend toward tips)
-            const depthFactor = 1 - (depth / maxLevels) * 0.4;
-            const theta = this.preset.branchAngleBase * 0.6 * depthFactor +
-                this.randomRange(-this.preset.branchAngleVariation * 0.5, this.preset.branchAngleVariation * 0.5);
+            const depthFactor = 1 - (depth / maxLevels) * 0.35;
+            const theta = this.preset.branchAngleBase * 0.55 * depthFactor +
+                this.randomRange(-this.preset.branchAngleVariation * 0.6, this.preset.branchAngleVariation * 0.6);
 
-            const isNearTerminal = depth >= maxLevels - 1;
+            const isNearTerminal = depth >= maxLevels - 2;
             const surfaceDir = this.getDirectionTowardSurface(endPoint);
 
             let childDir = this.calculateBranchDirection(direction, theta, phi);
 
             // If near terminal, attract branch toward the silhouette surface
             if (isNearTerminal) {
-                childDir.lerp(surfaceDir, 0.4);
+                childDir.lerp(surfaceDir, 0.35);
                 childDir.normalize();
             }
 
-            // Slight upward bias for phototropism
-            childDir.y += 0.04 * (1 - depth * 0.15);
+            // Phototropism - upward curvature, stronger at tips (uses preset value)
+            const curvature = this.preset.terminalCurvature || 0.1;
+            const curvatureStrength = curvature * (0.5 + depth * 0.15);
+            childDir.y += curvatureStrength;
             childDir.normalize();
 
-            const actualLength = childLength * this.randomRange(0.8, 1.2);
+            const actualLength = childLength * this.randomRange(0.75, 1.25);
             const actualRadius = Math.max(childRadius * this.randomRange(0.9, 1.1), minRadius);
 
             this.generateBranchWithEnvelope(
