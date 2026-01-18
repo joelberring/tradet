@@ -110,6 +110,8 @@ export const Tree = () => {
                     preset: settings.treeSpecies,
                     age: settings.treeAge,
                     crownWidth: settings.crownWidth,
+                    trunkHeight: settings.trunkHeight,
+                    crownDensity: settings.crownDensity,
                 });
 
                 console.log('[Tree] Generated', branches.length, 'realistic segments');
@@ -146,6 +148,8 @@ export const Tree = () => {
         settings.treeAge,
         settings.treeHeight,
         settings.crownWidth,
+        settings.trunkHeight,
+        settings.crownDensity,
         settings.recursionDepth,
         settings.minPrintableRadius,
         settings.modelScale,

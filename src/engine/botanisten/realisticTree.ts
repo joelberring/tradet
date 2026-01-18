@@ -42,79 +42,79 @@ export interface TreePreset {
 export const TREE_PRESETS: Record<string, TreePreset> = {
     linden: {
         name: 'Lind (Tilia cordata)',
-        trunkHeightRatio: 0.40,           // Taller trunk like reference images
-        trunkDiameterRatio: 0.035,        // Slightly thinner for elegance
-        branchAngleBase: Math.PI / 3,     // ~60 degrees - wider spread
-        branchAngleVariation: 0.4,        // More natural variation
-        radiusDecay: 0.50,                // Faster tapering for elegance
-        lengthDecay: 0.75,                // Longer secondary branches
+        trunkHeightRatio: 0.30,           // Lower trunk for fuller crown
+        trunkDiameterRatio: 0.028,        // Elegant trunk proportion
+        branchAngleBase: Math.PI / 4,     // ~45 degrees - upward sweep
+        branchAngleVariation: 0.30,       // Natural variation
+        radiusDecay: 0.58,                // Slower tapering for denser branches
+        lengthDecay: 0.75,                // Longer branches
         crownShape: 'oval',
-        maxBranchLevels: 5,               // Reduced for cleaner look
-        terminalBranchCount: 2,
-        leaderRatio: 0.85,
-        terminalCurvature: 0.15,          // Gentle upward curve at tips
-        branchesPerLevel: 3,              // Sparser branches
+        maxBranchLevels: 7,               // More levels for dense silhouette
+        terminalBranchCount: 3,           // More terminal branches
+        leaderRatio: 0.90,                // Strong leader for clear top
+        terminalCurvature: 0.08,          // Subtle upward curve
+        branchesPerLevel: 6,              // Many branches for dense crown
     },
     oak: {
         name: 'Ek (Quercus robur)',
-        trunkHeightRatio: 0.30,           // Higher trunk
-        trunkDiameterRatio: 0.055,        // Thick trunk
-        branchAngleBase: Math.PI / 2.5,   // ~72 degrees - spreading
-        branchAngleVariation: 0.45,       // Very natural, irregular
-        radiusDecay: 0.55,
-        lengthDecay: 0.72,
+        trunkHeightRatio: 0.25,           // Low crown start - characteristic oak
+        trunkDiameterRatio: 0.045,        // Strong but not excessive trunk
+        branchAngleBase: Math.PI / 3,     // ~60 degrees - upward then spreading
+        branchAngleVariation: 0.40,       // Natural irregularity
+        radiusDecay: 0.58,
+        lengthDecay: 0.70,
         crownShape: 'dome',
-        maxBranchLevels: 4,               // Reduced for clarity
-        terminalBranchCount: 2,
-        leaderRatio: 0.55,
-        terminalCurvature: 0.08,          // Slight upward curve
-        branchesPerLevel: 4,              // Dense but not cluttered
+        maxBranchLevels: 5,               // Good detail
+        terminalBranchCount: 3,           // Fuller terminal branching
+        leaderRatio: 0.80,                // Strong leader extends through crown
+        terminalCurvature: 0.10,          // Upward curve at tips
+        branchesPerLevel: 5,              // Dense, characteristic oak crown
     },
     birch: {
         name: 'Björk (Betula)',
-        trunkHeightRatio: 0.45,           // Very tall trunk
-        trunkDiameterRatio: 0.020,        // Slender
-        branchAngleBase: Math.PI / 3.5,   // ~51 degrees - elegant angle
-        branchAngleVariation: 0.3,
-        radiusDecay: 0.48,                // Fast tapering
-        lengthDecay: 0.68,
-        crownShape: 'pyramidal',
-        maxBranchLevels: 5,
-        terminalBranchCount: 2,
-        leaderRatio: 0.95,
-        terminalCurvature: 0.20,          // Drooping then upward - characteristic
-        branchesPerLevel: 3,
+        trunkHeightRatio: 0.40,           // Mid-height crown start
+        trunkDiameterRatio: 0.022,        // Thin but not too thin (needs radius for branches)
+        branchAngleBase: Math.PI / 3.5,   // ~51 degrees - elegant upward then drooping
+        branchAngleVariation: 0.30,       // Natural irregularity  
+        radiusDecay: 0.60,                // Good visible branches
+        lengthDecay: 0.72,                // Good branch length
+        crownShape: 'dome',               // Dome works better for deciduous
+        maxBranchLevels: 6,               // Fine detail
+        terminalBranchCount: 3,           // Many fine twigs - birch character
+        leaderRatio: 0.85,                // Clear central leader
+        terminalCurvature: 0.18,          // Characteristic weeping at tips
+        branchesPerLevel: 5,              // Dense branching
     },
     // Conifers
     spruce: {
         name: 'Gran (Picea abies)',
-        trunkHeightRatio: 0.10,           // Low branches
-        trunkDiameterRatio: 0.022,        // Slender trunk
-        branchAngleBase: Math.PI / 2.0,   // ~90 degrees - horizontal
-        branchAngleVariation: 0.10,       // Very consistent (pyramid)
+        trunkHeightRatio: 0.02,           // Branches from very near ground
+        trunkDiameterRatio: 0.016,        // Slender conifer trunk
+        branchAngleBase: Math.PI / 2.0,   // ~90 degrees - horizontal then drooping
+        branchAngleVariation: 0.03,       // Very consistent for clean pyramid
         radiusDecay: 0.50,
-        lengthDecay: 0.90,                // Branches get much shorter at top
+        lengthDecay: 0.92,                // Strong taper - bottom branches much longer
         crownShape: 'pyramidal',
-        maxBranchLevels: 4,
+        maxBranchLevels: 3,               // Simple whorl structure
         terminalBranchCount: 2,
-        leaderRatio: 0.99,                // Strong central leader
-        terminalCurvature: 0.05,          // Very slight droop then up
-        branchesPerLevel: 5,              // Whorled branches
+        leaderRatio: 1.0,                 // Leader extends to very top
+        terminalCurvature: -0.08,         // Downward droop (characteristic spruce)
+        branchesPerLevel: 8,              // More whorled branches
     },
     pine: {
         name: 'Tall (Pinus sylvestris)',
-        trunkHeightRatio: 0.70,           // Very high trunk
-        trunkDiameterRatio: 0.028,        // Moderate trunk
-        branchAngleBase: Math.PI / 2.3,   // ~78 degrees - nearly horizontal
-        branchAngleVariation: 0.45,       // Irregular, gnarled
+        trunkHeightRatio: 0.50,           // High trunk - mature pine
+        trunkDiameterRatio: 0.012,        // Thinner trunk
+        branchAngleBase: Math.PI / 2.3,   // ~78 degrees - spreading
+        branchAngleVariation: 0.40,       // Natural irregularity
         radiusDecay: 0.58,
-        lengthDecay: 0.62,                // Branches maintain length
+        lengthDecay: 0.72,                // Good branch length
         crownShape: 'umbrella',           // Flat-topped
-        maxBranchLevels: 4,
-        terminalBranchCount: 2,
-        leaderRatio: 0.25,                // Leader stops early
-        terminalCurvature: 0.12,
-        branchesPerLevel: 3,
+        maxBranchLevels: 5,               // More branching detail
+        terminalBranchCount: 3,           // Fuller branching
+        leaderRatio: 0.50,                // Leader stops - umbrella top
+        terminalCurvature: 0.06,          // Subtle upward curve
+        branchesPerLevel: 6,              // More branches in crown
     },
 };
 
@@ -209,7 +209,7 @@ export class RealisticTreeGenerator {
     }
 
     /**
-     * Calculate crown radius at a given height (for rounded envelope)
+     * Calculate crown radius at a given height based on crown shape
      */
     private getCrownRadiusAtHeight(y: number, crownBase: number, crownTop: number, maxRadius: number): number {
         if (y < crownBase || y > crownTop) return 0;
@@ -217,8 +217,29 @@ export class RealisticTreeGenerator {
         const crownHeight = crownTop - crownBase;
         const normalizedY = (y - crownBase) / crownHeight;
 
-        // Oval/ellipsoid shape - max radius at center, tapering at top and bottom
-        const shapeMultiplier = Math.sin(normalizedY * Math.PI);
+        // Shape multiplier based on crown shape
+        let shapeMultiplier: number;
+
+        switch (this.preset.crownShape) {
+            case 'pyramidal':
+                // Widest at base, tapering to point at top (like spruce)
+                shapeMultiplier = 1.0 - normalizedY * 0.9;
+                break;
+            case 'umbrella':
+                // Narrow at bottom, wide at top (like Scots pine)
+                shapeMultiplier = 0.2 + normalizedY * 0.8;
+                break;
+            case 'dome':
+                // Rounded dome - wider in middle-upper region
+                shapeMultiplier = Math.sin(normalizedY * Math.PI * 0.8 + 0.2);
+                break;
+            case 'oval':
+            case 'spreading':
+            default:
+                // Oval/ellipsoid shape - max radius at center
+                shapeMultiplier = Math.sin(normalizedY * Math.PI);
+                break;
+        }
 
         return maxRadius * shapeMultiplier;
     }
@@ -233,6 +254,8 @@ export class RealisticTreeGenerator {
         preset?: string;
         age?: string;
         crownWidth?: number;
+        trunkHeight?: number;    // Manual override for trunk height ratio (0-1)
+        crownDensity?: number;   // Manual override for branch density (1-10)
     }): BranchSegment[] {
         this.segments = [];
         this.seed = params.seed ?? 42;
@@ -242,8 +265,12 @@ export class RealisticTreeGenerator {
         const treeHeight = params.treeHeight;
         const crownWidth = params.crownWidth ?? 1.0;
 
-        // Calculate trunk dimensions
-        const baseOfCrown = treeHeight * this.preset.trunkHeightRatio;
+        // Use manual overrides if provided, otherwise use preset defaults
+        const effectiveTrunkHeight = params.trunkHeight ?? this.preset.trunkHeightRatio;
+        const effectiveDensity = params.crownDensity ?? 5;  // 1-10 scale
+
+        // Calculate trunk dimensions using effective trunk height
+        const baseOfCrown = treeHeight * effectiveTrunkHeight;
         // Conifers with very low trunk ratios need trunk radius based on treeHeight
         // Deciduous trees use baseOfCrown to maintain original proportions
         const isConifer = this.preset.crownShape === 'pyramidal' || this.preset.crownShape === 'umbrella';
@@ -301,7 +328,8 @@ export class RealisticTreeGenerator {
         const maxLevels = Math.max(4, this.preset.maxBranchLevels + this.ageModifiers.maxLevelsAdjust);
 
         // Generate branches at multiple heights along the leader
-        const numBranchLevels = Math.floor(5 + this.ageModifiers.branchDensityMultiplier * 3);
+        // Use crownDensity parameter: 1=sparse (4 levels), 10=dense (15 levels)
+        const numBranchLevels = Math.floor(4 + (effectiveDensity / 10) * 11 * this.ageModifiers.branchDensityMultiplier);
 
         for (let level = 0; level < numBranchLevels; level++) {
             // Height along the leader where this tier of branches originates
@@ -401,10 +429,11 @@ export class RealisticTreeGenerator {
             r2: endRadius,
         });
 
-        // Generate child branches
-        const numChildren = depth < 2 ?
-            Math.floor(2 + this.random()) :  // Simpler at primary level
+        // Generate child branches - balance density vs performance
+        const baseChildren = depth < 2 ?
+            Math.floor(3 + this.random()) :  // 3-4 at primary level
             this.preset.terminalBranchCount;
+        const numChildren = Math.min(baseChildren, 4); // cap at 4 for performance
 
         const childRadius = radius * this.preset.radiusDecay;
         const childLength = length * this.preset.lengthDecay;

@@ -55,6 +55,24 @@ export const Controls = () => {
                 label: 'Kronbredd',
                 render: (get) => get('Mode.generationMode') === 'realistic'
             },
+            trunkHeight: {
+                value: 0.3,
+                min: 0.1,
+                max: 0.7,
+                step: 0.05,
+                label: 'Stamhöjd',
+                hint: '(var grenarna börjar)',
+                render: (get) => get('Mode.generationMode') === 'realistic'
+            },
+            crownDensity: {
+                value: 5,
+                min: 1,
+                max: 10,
+                step: 1,
+                label: 'Kronfyllnad',
+                hint: '(antal grenar)',
+                render: (get) => get('Mode.generationMode') === 'realistic'
+            },
         }, { collapsed: false }),
         // Branching detail controls
         'Grenstruktur': folder({
