@@ -273,11 +273,9 @@ export class RealisticTreeGenerator {
         const effectiveDensity = params.crownDensity ?? 5;  // 1-10 scale
 
         // Calculate trunk dimensions using effective trunk height
-        // Conifers with very low trunk ratios need trunk radius based on treeHeight
-        // Deciduous trees use baseOfCrown to maintain original proportions
-        const isConifer = this.preset.crownShape === 'pyramidal' || this.preset.crownShape === 'umbrella';
-        const trunkRadiusBase = isConifer ? treeHeight : baseOfCrown;
-        const trunkRadius = trunkRadiusBase * this.preset.trunkDiameterRatio * this.ageModifiers.trunkThicknessMultiplier;
+        // Trunk radius should be proportional to tree height, not crown base
+        // This ensures consistent branch thickness regardless of where branches start
+        const trunkRadius = treeHeight * this.preset.trunkDiameterRatio * this.ageModifiers.trunkThicknessMultiplier;
         // Higher min radius = fewer segments = faster generation
         const minRadius = Math.max(params.minRadius * 0.25, 0.03);
 
